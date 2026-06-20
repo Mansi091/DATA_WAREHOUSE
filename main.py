@@ -3,13 +3,14 @@ from src.config.settings import RAW_DATA_PATH
 from src.validation.validation import DataValidator
 from src.transformation.transform import DataTransformer
 from src.loading.load import DataLoader
+from src.dims_creating.dimensions import DimensionBuilder
 
 def main():
-    # 1. Ingestion
+    #ingestion
     ingestion = DataIngestion(RAW_DATA_PATH)
     df = ingestion.load_data()
 
-    # 2. Validation
+    #validation
     validator = DataValidator(df)
     report = validator.generate_report()
     validator.save_report(report)
@@ -18,17 +19,23 @@ def main():
     for metric, value in report.items():
         print(f"{metric}:{value}")
 
-    # 3. Transformation
-    print("\nStarting Data Transformation...\n")
+    #transformation
+    print("\nstsrting data transformation\n")
     transformer = DataTransformer(df)
     transformer.clean_data()
     featured_df = transformer.create_features()
     transformer.save_data()
 
-    # 4. Loading
-    print("\nStarting Data Loading...\n")
+    #loading
+    print("\nstarting data loading\n")
     loader = DataLoader(featured_df)
     loader.load_to_db()
+
+    print("\ncreating dimension table\n")
+
+    dimension_builder = DimensionBuilder()
+
+    dimension_builder.build_dimensions()
 
 if __name__ == "__main__":
     main()
