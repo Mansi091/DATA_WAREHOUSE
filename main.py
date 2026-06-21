@@ -37,5 +37,11 @@ def main():
 
     dimension_builder.build_dimensions()
 
+    print("\nrunning ML customer segmentation\n")
+
+    from src.ml.segmentation import CustomerSegmenter
+    segmenter = CustomerSegmenter()
+    segmenter.run_segmentation()
+
 if __name__ == "__main__":
     main()
