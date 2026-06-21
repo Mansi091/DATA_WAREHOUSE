@@ -38,7 +38,7 @@ flowchart TD
 2. **Data Cleaning & Feature Engineering**: Filters out returns and null identifiers, creates custom financial features (`Revenue`), and parses temporal fields (`Year`, `Month`, `Quarter`, `Day`, `Weekday`).
 3. **Star Schema Dimension Modeling**: Loads data into a PostgreSQL staging table and splits it into structured dimension tables (`dim_customer`, `dim_product`, `dim_country`, `dim_date`).
 4. **ML Customer Segmentation**: Extracts RFM (Recency, Frequency, Monetary) metrics, handles features skewness using log-scaling, standardizes values, and trains a K-Means model to segment customers into value-based profiles.
-5. **Containerization**: Fully dockerized environment, allowing the entire pipeline to execute in an isolated container while safely connecting to the host database.
+5. **Docker Compose Orchestration**: Simplifies building and executing the pipeline container with a single command, passing credentials and network configurations dynamically.
 6. **Power BI Dashboarding**: Pre-designed dashboard mapping KPIs, monthly revenue trends, product performance, and geospatial sales, with support for customer segment slicing.
 
 ---
@@ -97,11 +97,18 @@ The pipeline executes a K-Means clustering model ($K=4$) on customer RFM behavio
 ### Docker Deployment
 You can build and run the pipeline inside a Docker container while connecting to your host PostgreSQL database:
 
-1. Build the Docker image:
-   ```bash
-   docker build -t retail-etl .
-   ```
-2. Run the pipeline container:
-   ```bash
-   docker run --env-file .env -e DB_HOST=host.docker.internal --add-host=host.docker.internal:host-gateway retail-etl
-   ```
+* **Using Docker Compose (Recommended & Simplest)**:
+  Run this single command to build the image and run the container:
+  ```bash
+  docker compose up --build
+  ```
+
+* **Using Raw Docker Commands**:
+  1. Build the Docker image:
+     ```bash
+     docker build -t retail-etl .
+     ```
+  2. Run the pipeline container:
+     ```bash
+     docker run --env-file .env -e DB_HOST=host.docker.internal --add-host=host.docker.internal:host-gateway retail-etl
+     ```
