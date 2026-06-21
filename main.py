@@ -26,16 +26,8 @@ def main():
     featured_df = transformer.create_features()
     transformer.save_data()
 
-    from src.store.store_s3 import S3Storage
-    s3_storage = S3Storage()
-
-    s3_storage.upload_dataframe(
-    featured_df,
-    "processed/cleaned_retail.csv")
-
-    print("processed data uploaded to S3")
-
     #loading
+
     print("\nstarting data loading\n")
     loader = DataLoader(featured_df)
     loader.load_to_db()

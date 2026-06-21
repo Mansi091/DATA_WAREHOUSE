@@ -1,16 +1,9 @@
 import pandas as pd
-import boto3
-import os
-
-from io import StringIO
-from dotenv import load_dotenv
-
 from src.utils.logger import get_logger
 from src.config.settings import CLEANED_DATA_PATH
 
-load_dotenv()
-
 logger = get_logger()
+
 
 
 class DataTransformer:
