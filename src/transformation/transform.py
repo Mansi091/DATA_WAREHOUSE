@@ -1,6 +1,14 @@
 import pandas as pd
+import boto3
+import os
+
+from io import StringIO
+from dotenv import load_dotenv
+
 from src.utils.logger import get_logger
 from src.config.settings import CLEANED_DATA_PATH
+
+load_dotenv()
 
 logger = get_logger()
 
@@ -13,18 +21,22 @@ class DataTransformer:
     def clean_data(self):
         try:
             logger.info("Starting data transformation")
+
             initial_rows = len(self.df)
 
-            self.df = self.df.dropna(subset=["CustomerID"])
+            self.df = self.df.dropna(
+                subset=["CustomerID"]
+            )
 
+            self.df = self.df.dropna(
+                subset=["Description"]
+            )
 
-            self.df = self.df.dropna(subset=["Description"])
-
-
-            self.df = self.df[self.df["Quantity"] > 0]
+            self.df = self.df[
+                self.df["Quantity"] > 0
+            ]
 
             self.df = self.df.drop_duplicates()
-
 
             self.df = self.df[
                 ~self.df["InvoiceNo"]
@@ -39,13 +51,18 @@ class DataTransformer:
             )
 
             return self.df
+
         except Exception as e:
-            logger.error(f"Data cleaning failed: {e}")
+            logger.error(
+                f"Data cleaning failed: {e}"
+            )
             raise e
 
     def create_features(self):
         try:
-            logger.info("creating new features")
+            logger.info(
+                "Creating new features"
+            )
 
             self.df["Revenue"] = (
                 self.df["Quantity"]
@@ -76,16 +93,24 @@ class DataTransformer:
                 self.df["InvoiceDate"].dt.day_name()
             )
 
+            logger.info(
+                "Feature engineering completed successfully"
+            )
+
             return self.df
 
         except Exception as e:
-            logger.error(f"creation of new features failed: {e}")
+            logger.error(
+                f"Creation of new features failed: {e}"
+            )
             raise e
 
     def save_data(self):
         try:
-
-            CLEANED_DATA_PATH.parent.mkdir(parents=True, exist_ok=True)
+            CLEANED_DATA_PATH.parent.mkdir(
+                parents=True,
+                exist_ok=True
+            )
 
             self.df.to_csv(
                 CLEANED_DATA_PATH,
@@ -93,8 +118,13 @@ class DataTransformer:
             )
 
             logger.info(
-                "Processed data saved successfully"
+                f"Processed data saved locally at: {CLEANED_DATA_PATH}"
             )
+
         except Exception as e:
-            logger.error(f"Saving processed data failed: {e}")
+
+            logger.error(
+                f"Saving processed data failed: {e}"
+            )
+
             raise e
