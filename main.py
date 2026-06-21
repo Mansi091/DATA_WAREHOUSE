@@ -26,7 +26,6 @@ def main():
     featured_df = transformer.create_features()
     transformer.save_data()
 
-    # pyrefly: ignore [missing-import]
     from src.store.store_s3 import S3Storage
     s3_storage = S3Storage()
 
