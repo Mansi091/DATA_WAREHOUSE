@@ -1,4 +1,4 @@
-# End-to-End E-Commerce ETL, ML Customer Segmentation & BI Pipeline
+# RetailPulse : End-to-End E-Commerce ETL, ML Customer Segmentation & BI Pipeline
 
 An end-to-end data engineering and machine learning project that processes e-commerce retail transactions, cleans and validates the dataset, loads it into a PostgreSQL database, segments customers using K-Means clustering, and visualizes business metrics in Power BI.
 
